@@ -1,10 +1,8 @@
 import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter } from "next/font/google";
 import type { Metadata } from "next";
-
-const inter = Inter({ subsets: ["latin"] });
+import NextThemeProvider from "@/providers/NextThemeProvider";
 
 export const metadata: Metadata = {
   title: "AI KIT",
@@ -19,7 +17,11 @@ const RootLayout: React.FC<props> = ({ children }) => {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className="">
+          <NextThemeProvider>
+            {children}
+          </NextThemeProvider>
+        </body>
       </html>
     </ClerkProvider>
   );
