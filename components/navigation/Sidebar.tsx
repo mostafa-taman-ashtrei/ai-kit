@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, Cog, LayoutDashboard } from "lucide-react";
+import { Bot, Code, Cog, LayoutDashboard } from "lucide-react";
 
 import GradientText from "../general/GradientText";
 import Link from "next/link";
@@ -27,10 +27,16 @@ const Sidebar: React.FC = () => {
             color: "text-violet-500",
         },
         {
+            label: "Code",
+            icon: Code,
+            href: "/code",
+            color: "text-violet-500",
+        },
+        {
             label: "Settings",
             icon: Cog,
             href: "/settings",
-            color: "text-sky-700"
+            color: "text-sky-500"
         },
     ];
 

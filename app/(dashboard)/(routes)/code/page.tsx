@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 
-import { Bot, Loader2, Send } from "lucide-react";
+import { Code as CodeIcon, Copy, Loader2, Wand2 } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import AiAvatar from "@/components/chat/AiAvatar";
@@ -11,6 +11,7 @@ import { ChatCompletionMessage } from "openai/resources/chat/completions";
 import Empty from "@/components/general/Empty";
 import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
+import ReactMarkdown from "react-markdown";
 import UserAvatar from "@/components/chat/UserAvatar";
 import axios from "axios";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const Chat: React.FC = () => {
+const Code: React.FC = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
 
@@ -36,10 +37,12 @@ const Chat: React.FC = () => {
         try {
             const userMessage: ChatCompletionMessage = { role: "user", content: values.prompt };
             const newMessages = [...messages, userMessage];
-            const response = await axios.post("/api/chat", { messages: newMessages });
 
-            setMessages((prev) => [...prev, userMessage, response.data]);
+            const response = await axios.post("/api/code", { messages: newMessages });
+
+            setMessages((current) => [...current, userMessage, response.data]);
             form.reset();
+
         } catch (error) {
             toast.error("Something went wrong.");
         } finally {
@@ -47,12 +50,18 @@ const Chat: React.FC = () => {
         }
     };
 
+    const handleCopy = (content: string | null) => {
+        if (content === null) return;
+        navigator.clipboard.writeText(content);
+        toast.success("Content Copied");
+    };
+
     return (
         <div>
             <Heading
-                title="Chat"
-                description="Chat with best models. Ask any question & you will recieve an answer in just a few seconds"
-                icon={Bot}
+                title="Code Generation"
+                description="Generate clean and efficent code in just a few seconds saving yourself a lot of time and effort."
+                icon={CodeIcon}
                 iconColor="text-violet-500"
                 bgColor="bg-violet-500/10"
             />
@@ -70,7 +79,7 @@ const Chat: React.FC = () => {
                                         <FormControl className="m-0 p-0">
                                             <Input
                                                 className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-                                                placeholder="How can I calculate the radius of the earth?"
+                                                placeholder="Center a div using tailwind css."
                                                 disabled={isLoading}
                                                 {...field}
                                             />
@@ -90,38 +99,57 @@ const Chat: React.FC = () => {
                                         ? <div className="flex gap-2 items-center flex-row">
                                             <Loader2 className="animate-spin" />
                                             <span>
-                                                Sending
+                                                Generating
                                             </span>
                                         </div>
                                         : <div className="flex gap-2 items-center flex-row">
-                                            <Send />
+                                            <Wand2 />
                                             <span>
-                                                Send
+                                                Generate
                                             </span>
                                         </div>
                                 }
-
-
                             </Button>
                         </form>
                     </Form>
                 </div>
 
-                {messages.length === 0 && !isLoading && <Empty message="Your chat is empty ... say something to break the ice 🧊." />}
+                {messages.length === 0 && !isLoading && <Empty message="Your wish is my command tell me what you need." />}
 
                 <div className="flex flex-col-reverse gap-y-4 mx-6 my-4">
                     {messages.map((message) => (
                         <div
                             key={message.content}
                             className={cn(
-                                "p-2 w-full flex items-center gap-x-8 rounded-xl",
-                                message.role === "user" ? "dark:bg-gray-900 border-2 border-black/10 dark:border-gray-700 dark:border-4:" : "bg-muted border",
+                                "p-2 w-full flex items-start gap-x-8 rounded-xl",
+                                message.role === "user" ? "bg-gray-300 dark:bg-gray-900 border-2 border-black/10 dark:border-gray-700 dark:border-4:" : "bg-muted border",
                             )}
                         >
-                            {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
-                            <p className="text-sm">
-                                {message.content}
-                            </p>
+                            {
+                                message.role === "user"
+                                    ? <UserAvatar />
+                                    : <div className="flex flex-col gap-2 justify-between items-center">
+                                        <AiAvatar />
+                                        <Copy
+                                            className="cursor-pointer hover:text-slate-400"
+                                            onClick={() => handleCopy(message.content)}
+                                        />
+                                    </div>
+                            }
+
+                            <ReactMarkdown
+                                components={{
+                                    pre: ({ ...props }) => (
+                                        <div className="overflow-auto w-full my-2 bg-gray-300 dark:bg-gray-900 p-2 rounded-lg">
+                                            <pre {...props} />
+                                        </div>
+                                    ),
+                                    code: ({ ...props }) => (<code className="bg-black/10 rounded-lg p-1" {...props} />)
+                                }}
+                                className="text-sm overflow-hidden leading-7"
+                            >
+                                {message.content || ""}
+                            </ReactMarkdown>
                         </div>
                     ))}
                 </div>
@@ -130,4 +158,4 @@ const Chat: React.FC = () => {
     );
 };
 
-export default Chat;
+export default Code;
