@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import NextThemeProvider from "@/providers/NextThemeProvider";
+import ToasterProvider from "@/providers/ToastProvider";
 
 export const metadata: Metadata = {
   title: "AI KIT",
@@ -19,6 +20,7 @@ const RootLayout: React.FC<props> = ({ children }) => {
       <html lang="en">
         <body className="">
           <NextThemeProvider>
+            <ToasterProvider />
             {children}
           </NextThemeProvider>
         </body>

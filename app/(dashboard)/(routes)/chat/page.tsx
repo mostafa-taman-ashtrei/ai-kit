@@ -2,51 +2,50 @@
 
 import * as z from "zod";
 
-import { Bot, Send } from "lucide-react";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Bot, Loader2, Send } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import AiAvatar from "@/components/chat/AiAvatar";
 import { Button } from "@/components/ui/button";
 import { ChatCompletionMessage } from "openai/resources/chat/completions";
+import Empty from "@/components/general/Empty";
 import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
 import UserAvatar from "@/components/chat/UserAvatar";
+import axios from "axios";
 import { cn } from "@/lib/utils";
 import { formSchema } from "./constants";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Chat: React.FC = () => {
-    const [messages] = useState<ChatCompletionMessage[]>([
-        {
-            content: "How can I calculate the radius of the earth?",
-            role: "user",
-        },
-        {
-            content: "Eratosthenes estimated the circumference of the Earth to be about 40,000 km. He also knew that the circumference of a circle was equal to 2 times π (3.1415...) times the radius of the circle. (C = 2πr) With this information, Eratosthenes inferred that the Earth's radius was 6366 km.",
-            role: "assistant",
-        },
-        {
-            content: "Does time go faster at the top of a building compared to the bottom?",
-            role: "user",
-        },
-        {
-            content: "Yes, time goes faster the farther away you are from the earth's surface compared to the time on the surface of the earth. This effect is known as gravitational time dilation. It is predicted by Einsteins theory of General Relativity and has by verified multiple times by experiments. Gravitational time dilation occurs because objects with a lot of mass create a strong gravitational field. The gravitational field is really a curving of space and time. The stronger the gravity, the more spacetime curves, and the slower time itself proceeds. We should note here, however, that an observer in the strong gravity experiences his time as running normal.",
-            role: "assistant",
-        }
-    ]);
+    const router = useRouter();
+    const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            prompt: ""
-        }
+        defaultValues: { prompt: "" }
     });
 
     const isLoading = form.formState.isSubmitting;
 
-    const handleSubmit = () => { };
+    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const userMessage: ChatCompletionMessage = { role: "user", content: values.prompt };
+            const newMessages = [...messages, userMessage];
+            const response = await axios.post("/api/chat", { messages: newMessages });
+
+            setMessages((prev) => [...prev, userMessage, response.data]);
+            form.reset();
+        } catch (error) {
+            toast.error("Something went wrong.");
+        } finally {
+            router.refresh();
+        }
+    };
 
     return (
         <div>
@@ -76,6 +75,7 @@ const Chat: React.FC = () => {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -85,35 +85,49 @@ const Chat: React.FC = () => {
                                 disabled={isLoading}
                                 size="icon"
                             >
+                                {
+                                    isLoading
+                                        ? <div className="flex gap-2 items-center flex-row">
+                                            <Loader2 className="animate-spin" />
+                                            <span>
+                                                Sending
+                                            </span>
+                                        </div>
+                                        : <div className="flex gap-2 items-center flex-row">
+                                            <Send />
+                                            <span>
+                                                Send
+                                            </span>
+                                        </div>
+                                }
 
-                                <div className="flex gap-2 items-center flex-row">
-                                    <Send />
-                                    <span>
-                                        Send
-                                    </span>
-                                </div>
+
                             </Button>
                         </form>
                     </Form>
                 </div>
 
+                {isLoading && <div className="py-48 animate-pulse mt-4 rounded-lg w-full flex items-center justify-center bg-muted" />}
+                {messages.length === 0 && !isLoading && <Empty message="Your chat is empty ... type something to get started" />}
 
-                <div className="flex flex-col-reverse gap-y-4 mx-6 my-4">
-                    {messages.map((message) => (
-                        <div
-                            key={message.content}
-                            className={cn(
-                                "p-2 w-full flex items-center gap-x-8 rounded-xl",
-                                message.role === "user" ? "bg-white dark:bg-gray-700 border border-black/10" : "bg-muted",
-                            )}
-                        >
-                            {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
-                            <p className="text-sm">
-                                {message.content}
-                            </p>
-                        </div>
-                    ))}
-                </div>
+                {
+                    !isLoading && <div className="flex flex-col-reverse gap-y-4 mx-6 my-4">
+                        {messages.map((message) => (
+                            <div
+                                key={message.content}
+                                className={cn(
+                                    "p-2 w-full flex items-center gap-x-8 rounded-xl",
+                                    message.role === "user" ? "bg-white dark:bg-gray-700 border border-black/10" : "bg-muted",
+                                )}
+                            >
+                                {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
+                                <p className="text-sm">
+                                    {message.content}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         </div>
     );
