@@ -4,11 +4,16 @@ import { auth } from "@clerk/nextjs";
 
 const openAiConfiguration = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+const instructionMessage = {
+    role: "system",
+    content: "You are a code generator. You must answer only in markdown code snippets. Use code comments for explanations."
+};
+
 export const POST = async (req: Request) => {
     try {
         const { userId } = auth();
         const body = await req.json();
-        const { messages } = body;
+        const { messages, type } = body;
 
 
         if (!userId) return new NextResponse("Unauthorized", { status: 401 });
@@ -16,8 +21,14 @@ export const POST = async (req: Request) => {
         if (!messages) return new NextResponse("Messages are required", { status: 400 });
 
 
+        const messageArray = typeof type === "undefined"
+            ? messages
+            : type === "code"
+                ? [instructionMessage, ...messages]
+                : messages;
+
         const completion = await openAiConfiguration.chat.completions.create({
-            messages,
+            messages: messageArray,
             model: "gpt-3.5-turbo",
         });
 

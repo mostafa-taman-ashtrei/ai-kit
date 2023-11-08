@@ -38,7 +38,7 @@ const Code: React.FC = () => {
             const userMessage: ChatCompletionMessage = { role: "user", content: values.prompt };
             const newMessages = [...messages, userMessage];
 
-            const response = await axios.post("/api/code", { messages: newMessages });
+            const response = await axios.post("/api/chat", { messages: newMessages, type: "code" });
 
             setMessages((current) => [...current, userMessage, response.data]);
             form.reset();
