@@ -2,13 +2,13 @@
 
 import * as z from "zod";
 
-import { Bot, Loader2, Send } from "lucide-react";
+import { Bot, Send } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import AiAvatar from "@/components/chat/AiAvatar";
-import { Button } from "@/components/ui/button";
 import { ChatCompletionMessage } from "openai/resources/chat/completions";
 import Empty from "@/components/general/Empty";
+import GenerateButton from "@/components/chat/GenerateButton";
 import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
 import UserAvatar from "@/components/chat/UserAvatar";
@@ -17,12 +17,14 @@ import { cn } from "@/lib/utils";
 import { formSchema } from "./formSchema";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useProModal } from "@/hooks/useProModal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Chat: React.FC = () => {
     const router = useRouter();
+    const { onOpen } = useProModal();
     const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -40,8 +42,9 @@ const Chat: React.FC = () => {
 
             setMessages((prev) => [...prev, userMessage, response.data]);
             form.reset();
-        } catch (error) {
-            toast.error("Something went wrong.");
+        } catch (error: any) {
+            if (error?.response?.status === 403) onOpen();
+            else toast.error("Something went wrong ... try again later.");
         } finally {
             router.refresh();
         }
@@ -51,7 +54,7 @@ const Chat: React.FC = () => {
         <div>
             <Heading
                 title="Chat"
-                description="Chat with best models. Ask any question & you will recieve an answer in just a few seconds"
+                description="Chat with smart models. Ask any question & you will recieve an answer in just a few seconds"
                 icon={Bot}
                 iconColor="text-violet-500"
                 bgColor="bg-violet-500/10"
@@ -79,30 +82,13 @@ const Chat: React.FC = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button
-                                className="col-span-12 lg:col-span-2 w-full bg-gradient-to-br gradient-primary font-bold hover:bg-transparent hover:bg-gradient-to-bl rounded-xl"
-                                type="submit"
-                                disabled={isLoading}
-                                size="icon"
-                            >
-                                {
-                                    isLoading
-                                        ? <div className="flex gap-2 items-center flex-row">
-                                            <Loader2 className="animate-spin" />
-                                            <span>
-                                                Sending
-                                            </span>
-                                        </div>
-                                        : <div className="flex gap-2 items-center flex-row">
-                                            <Send />
-                                            <span>
-                                                Send
-                                            </span>
-                                        </div>
-                                }
 
+                            <GenerateButton
+                                isLoading={isLoading}
+                                text="Send"
+                                icon={Send}
+                            />
 
-                            </Button>
                         </form>
                     </Form>
                 </div>

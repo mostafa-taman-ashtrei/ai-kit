@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { ModalProvider } from "@/providers/ModalProvider";
 import NextThemeProvider from "@/providers/NextThemeProvider";
 import ToasterProvider from "@/providers/ToastProvider";
 
@@ -21,6 +22,7 @@ const RootLayout: React.FC<props> = ({ children }) => {
         <body className="">
           <NextThemeProvider>
             <ToasterProvider />
+            <ModalProvider />
             {children}
           </NextThemeProvider>
         </body>

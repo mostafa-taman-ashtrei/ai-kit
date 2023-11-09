@@ -17,12 +17,14 @@ import NextImage from "next/image";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useProModal } from "@/hooks/useProModal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Image: React.FC = () => {
     const router = useRouter();
+    const { onOpen } = useProModal();
     const [photos, setPhotos] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,8 +46,10 @@ const Image: React.FC = () => {
             const urls = response.data.map((image: { url: string }) => image.url);
 
             setPhotos(urls);
-        } catch (error) {
-            toast.error("Something went wrong.");
+        } catch (error: any) {
+            if (error?.response?.status === 403) onOpen();
+            else toast.error("Something went wrong ... try again later.");
+
         } finally {
             router.refresh();
         }

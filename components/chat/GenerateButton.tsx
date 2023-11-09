@@ -1,15 +1,18 @@
-import { Loader2, Wand2 } from "lucide-react";
+import { Loader2, LucideIcon, Wand2 } from "lucide-react";
 
 import { Button } from "../ui/button";
 
 interface props {
     isLoading: boolean;
+    text?: string;
+    icon?: LucideIcon;
 }
 
-const GenerateButton: React.FC<props> = ({ isLoading }) => {
+const GenerateButton: React.FC<props> = ({ isLoading, icon: Icon, text }) => {
     return (
         <Button
-            className="col-span-12 lg:col-span-2 w-full bg-gradient-to-br gradient-primary font-bold hover:bg-transparent hover:bg-gradient-to-bl rounded-xl"
+            className="col-span-12 lg:col-span-2 w-full font-bold"
+            variant="gradient"
             type="submit"
             disabled={isLoading}
             size="icon"
@@ -17,15 +20,17 @@ const GenerateButton: React.FC<props> = ({ isLoading }) => {
             {
                 isLoading
                     ? <div className="flex gap-2 items-center flex-row">
-                        <Loader2 className="animate-spin" />
+                        {!Icon ? <Loader2 className="animate-spin" /> : <Icon className="animate-bounce" />}
+
                         <span>
-                            Generating
+                            {!text ? "Generating" : `${text}ing`}
                         </span>
                     </div>
                     : <div className="flex gap-2 items-center flex-row">
-                        <Wand2 />
+                        {!Icon ? <Wand2 /> : <Icon />}
+
                         <span>
-                            Generate
+                            {!text ? "Generate" : `${text}`}
                         </span>
                     </div>
             }

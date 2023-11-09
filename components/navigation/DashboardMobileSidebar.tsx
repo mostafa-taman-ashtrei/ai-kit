@@ -7,7 +7,11 @@ import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 
-const DashboardMobileSidebar: React.FC = () => {
+interface props {
+    apiLimit: number
+}
+
+const DashboardMobileSidebar: React.FC<props> = ({ apiLimit }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => { setIsMounted(true); }, []);
@@ -21,7 +25,7 @@ const DashboardMobileSidebar: React.FC = () => {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0">
-                <Sidebar />
+                <Sidebar apiLimit={apiLimit} />
             </SheetContent>
         </Sheet>
 

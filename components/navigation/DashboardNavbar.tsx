@@ -1,25 +1,16 @@
-"use client";
-
 import DashboardMobileSidebar from "./DashboardMobileSidebar";
 import ThemeTogglerButton from "./ThemeTogglerButton";
-import { UserButton } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-import { useTheme } from "next-themes";
+import UserAvatar from "./UserAvatar";
+import { getApiLimitCount } from "@/lib/apiLimit";
 
-const DashboardNavbar: React.FC = () => {
-    const { resolvedTheme } = useTheme();
-    const clerkTheme = resolvedTheme === "dark" ? { baseTheme: dark } : undefined;
+const DashboardNavbar: React.FC = async () => {
+    const apiLimit = await getApiLimitCount();
 
     return (
         <div className="flex items-center p-4">
-            <DashboardMobileSidebar />
+            <DashboardMobileSidebar apiLimit={apiLimit} />
             <div className="flex w-full justify-end gap-4  items-center">
-                <UserButton
-                    userProfileProps={{ appearance: clerkTheme }}
-                    appearance={clerkTheme}
-                    afterSignOutUrl="/"
-                />
-
+                <UserAvatar />
                 <ThemeTogglerButton />
             </div>
         </div>

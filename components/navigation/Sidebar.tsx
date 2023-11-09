@@ -3,6 +3,7 @@
 import { Bot, Code, Cog, Image, LayoutDashboard, Music, Video } from "lucide-react";
 
 import GradientText from "../general/GradientText";
+import LimitBox from "../dashboard/LimitBox";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,11 @@ import { usePathname } from "next/navigation";
 
 const poppins = Montserrat({ weight: "600", subsets: ["latin"] });
 
-const Sidebar: React.FC = () => {
+interface props {
+    apiLimit: number;
+}
+
+const Sidebar: React.FC<props> = ({ apiLimit }) => {
     const pathname = usePathname();
 
     const routes = [
@@ -85,6 +90,9 @@ const Sidebar: React.FC = () => {
                 </div>
             </div>
 
+            <LimitBox
+                apiLimit={apiLimit}
+            />
         </div>
     );
 };

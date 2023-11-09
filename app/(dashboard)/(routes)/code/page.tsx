@@ -18,12 +18,14 @@ import { cn } from "@/lib/utils";
 import { formSchema } from "./formSchema";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useProModal } from "@/hooks/useProModal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Code: React.FC = () => {
     const router = useRouter();
+    const { onOpen } = useProModal();
     const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -43,8 +45,9 @@ const Code: React.FC = () => {
             setMessages((current) => [...current, userMessage, response.data]);
             form.reset();
 
-        } catch (error) {
-            toast.error("Something went wrong.");
+        } catch (error: any) {
+            if (error?.response?.status === 403) onOpen();
+            else toast.error("Something went wrong ... try again later.");
         } finally {
             router.refresh();
         }

@@ -13,12 +13,14 @@ import axios from "axios";
 import { formSchema } from "./formSchema";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useProModal } from "@/hooks/useProModal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Video: React.FC = () => {
     const router = useRouter();
+    const { onOpen } = useProModal();
     const [video, setVideo] = useState<string | undefined>();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -38,8 +40,9 @@ const Video: React.FC = () => {
             setVideo(response.data[0]);
 
             form.reset();
-        } catch (error) {
-            toast.error("Something went wrong.");
+        } catch (error: any) {
+            if (error?.response?.status === 403) onOpen();
+            else toast.error("Something went wrong ... try again later.");
         } finally {
             router.refresh();
         }
