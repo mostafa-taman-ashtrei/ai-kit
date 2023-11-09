@@ -8,7 +8,7 @@ import Empty from "@/components/general/Empty";
 import GenerateButton from "@/components/chat/GenerateButton";
 import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
-import { Music as MusicIcon } from "lucide-react";
+import { Video as VideoIcon } from "lucide-react";
 import axios from "axios";
 import { formSchema } from "./constants";
 import toast from "react-hot-toast";
@@ -17,9 +17,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const Music: React.FC = () => {
+const Video: React.FC = () => {
     const router = useRouter();
-    const [music, setMusic] = useState<string | undefined>();
+    const [video, setVideo] = useState<string | undefined>();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -32,10 +32,11 @@ const Music: React.FC = () => {
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            setMusic(undefined);
-            const response = await axios.post("/api/replicate", values);
+            setVideo(undefined);
+            const response = await axios.post("/api/replicate", { prompt: values.prompt, generationType: "video" });
 
-            setMusic(response.data.audio);
+            setVideo(response.data[0]);
+
             form.reset();
         } catch (error) {
             toast.error("Something went wrong.");
@@ -47,9 +48,9 @@ const Music: React.FC = () => {
     return (
         <div>
             <Heading
-                title="Music Generation"
-                description="Generate your original music in a matter of seconds."
-                icon={MusicIcon}
+                title="Video Generation"
+                description="Turn your thoughts into videos with a click of a button."
+                icon={VideoIcon}
                 iconColor="text-violet-500"
                 bgColor="bg-violet-500/10"
             />
@@ -68,7 +69,7 @@ const Music: React.FC = () => {
                                         <Input
                                             className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                             disabled={isLoading}
-                                            placeholder="Violin Solo"
+                                            placeholder="Horses running in a field"
                                             {...field}
                                         />
                                     </FormControl>
@@ -81,16 +82,16 @@ const Music: React.FC = () => {
                     </form>
                 </Form>
 
-                {!music && !isLoading && <Empty message="What are you waiting for generate some music now 🎶🎵" />}
+                {!video && !isLoading && <Empty message="So far you have generated 0 videos ... start now 📽." />}
 
-                {music && (
-                    <audio controls className="w-full mt-8 rounded-xl bg-muted">
-                        <source src={music} />
-                    </audio>
+                {video && (
+                    <video controls className="w-full aspect-video mt-8 rounded-xl">
+                        <source src={video} />
+                    </video>
                 )}
             </div>
         </div>
     );
 };
 
-export default Music;
+export default Video;
