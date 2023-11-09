@@ -15,7 +15,7 @@ import ReactMarkdown from "react-markdown";
 import UserAvatar from "@/components/chat/UserAvatar";
 import axios from "axios";
 import { cn } from "@/lib/utils";
-import { formSchema } from "./constants";
+import { formSchema } from "./formSchema";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";

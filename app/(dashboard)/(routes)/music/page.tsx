@@ -10,7 +10,7 @@ import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
 import { Music as MusicIcon } from "lucide-react";
 import axios from "axios";
-import { formSchema } from "./constants";
+import { formSchema } from "./formSchema";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";

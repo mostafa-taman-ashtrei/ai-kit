@@ -6,7 +6,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { Download, ImageIcon } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { amountOptions, formSchema, resolutionOptions } from "./constants";
+import { amountOptions, formSchema, resolutionOptions } from "./formSchema";
 
 import { Button } from "@/components/ui/button";
 import Empty from "@/components/general/Empty";
