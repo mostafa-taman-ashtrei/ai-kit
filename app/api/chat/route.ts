@@ -1,3 +1,5 @@
+import { checkApiLimit, upApiLimit } from "@/lib/apiLimit";
+
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { auth } from "@clerk/nextjs";
@@ -20,6 +22,9 @@ export const POST = async (req: Request) => {
         if (!openAi.apiKey) return new NextResponse("OpenAI API Key not configured.", { status: 500 });
         if (!messages) return new NextResponse("Messages are required", { status: 400 });
 
+        const freeTrial = await checkApiLimit();
+
+        if (!freeTrial) return NextResponse.json("You reached the free accounf limit", { status: 403 });
 
         const messageArray = typeof type === "undefined"
             ? messages
@@ -32,6 +37,7 @@ export const POST = async (req: Request) => {
             model: "gpt-3.5-turbo",
         });
 
+        await upApiLimit();
         return NextResponse.json(completion.choices[0].message);
     } catch {
         return new NextResponse("Internal Server Error", { status: 500 });
