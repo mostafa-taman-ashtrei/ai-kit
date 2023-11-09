@@ -2,13 +2,13 @@
 
 import * as z from "zod";
 
-import { Code as CodeIcon, Copy, Loader2, Wand2 } from "lucide-react";
+import { Code as CodeIcon, Copy } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import AiAvatar from "@/components/chat/AiAvatar";
-import { Button } from "@/components/ui/button";
 import { ChatCompletionMessage } from "openai/resources/chat/completions";
 import Empty from "@/components/general/Empty";
+import GenerateButton from "@/components/chat/GenerateButton";
 import Heading from "@/components/general/Heading";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -88,33 +88,13 @@ const Code: React.FC = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button
-                                className="col-span-12 lg:col-span-2 w-full bg-gradient-to-br gradient-primary font-bold hover:bg-transparent hover:bg-gradient-to-bl rounded-xl"
-                                type="submit"
-                                disabled={isLoading}
-                                size="icon"
-                            >
-                                {
-                                    isLoading
-                                        ? <div className="flex gap-2 items-center flex-row">
-                                            <Loader2 className="animate-spin" />
-                                            <span>
-                                                Generating
-                                            </span>
-                                        </div>
-                                        : <div className="flex gap-2 items-center flex-row">
-                                            <Wand2 />
-                                            <span>
-                                                Generate
-                                            </span>
-                                        </div>
-                                }
-                            </Button>
+
+                            <GenerateButton isLoading={isLoading} />
                         </form>
                     </Form>
                 </div>
 
-                {messages.length === 0 && !isLoading && <Empty message="Your wish is my command tell me what you need." />}
+                {messages.length === 0 && !isLoading && <Empty message="Code === null; Generate().now();" />}
 
                 <div className="flex flex-col-reverse gap-y-4 mx-6 my-4">
                     {messages.map((message) => (
