@@ -8,10 +8,11 @@ import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 
 interface props {
-    apiLimit: number
+    apiLimit: number;
+    isPro: boolean;
 }
 
-const DashboardMobileSidebar: React.FC<props> = ({ apiLimit }) => {
+const DashboardMobileSidebar: React.FC<props> = ({ apiLimit, isPro }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => { setIsMounted(true); }, []);
@@ -25,7 +26,10 @@ const DashboardMobileSidebar: React.FC<props> = ({ apiLimit }) => {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0">
-                <Sidebar apiLimit={apiLimit} />
+                <Sidebar
+                    apiLimit={apiLimit}
+                    isPro={isPro}
+                />
             </SheetContent>
         </Sheet>
 

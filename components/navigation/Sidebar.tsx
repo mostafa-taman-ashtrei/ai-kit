@@ -13,9 +13,10 @@ const poppins = Montserrat({ weight: "600", subsets: ["latin"] });
 
 interface props {
     apiLimit: number;
+    isPro: boolean;
 }
 
-const Sidebar: React.FC<props> = ({ apiLimit }) => {
+const Sidebar: React.FC<props> = ({ apiLimit, isPro }) => {
     const pathname = usePathname();
 
     const routes = [
@@ -92,6 +93,7 @@ const Sidebar: React.FC<props> = ({ apiLimit }) => {
 
             <LimitBox
                 apiLimit={apiLimit}
+                isPro={isPro}
             />
         </div>
     );

@@ -3,6 +3,7 @@ import { checkApiLimit, upApiLimit } from "@/lib/apiLimit";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 import { auth } from "@clerk/nextjs";
+import { checkUserSubscription } from "@/lib/subscription";
 
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN!,
@@ -18,8 +19,9 @@ export const POST = async (req: Request) => {
         if (!prompt) return new NextResponse("Prompt is required", { status: 400 });
 
         const freeTrial = await checkApiLimit();
+        const isPro = await checkUserSubscription();
 
-        if (!freeTrial) return NextResponse.json("You reached the free accounf limit", { status: 403 });
+        if (!freeTrial && !isPro) return NextResponse.json("You reached the free accounf limit", { status: 403 });
 
 
         const replicateModel = generationType === "video"
@@ -35,7 +37,7 @@ export const POST = async (req: Request) => {
             }
         );
 
-        await upApiLimit();
+        if (!isPro) await upApiLimit();
         return NextResponse.json(response);
     } catch (error) {
         return new NextResponse("Internal Server Error", { status: 500 });

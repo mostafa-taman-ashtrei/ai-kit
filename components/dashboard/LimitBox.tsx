@@ -9,15 +9,18 @@ import { useProModal } from "@/hooks/useProModal";
 
 interface props {
     apiLimit: number;
+    isPro: boolean;
 }
 
-const LimitBox: React.FC<props> = ({ apiLimit }) => {
+const LimitBox: React.FC<props> = ({ apiLimit, isPro }) => {
     const [mounted, setMounted] = useState(false);
     const proModal = useProModal();
 
     useEffect(() => { setMounted(true); }, []);
 
     if (!mounted) return null;
+
+    if (isPro) return null;
 
     return (
         <div className="px-3">

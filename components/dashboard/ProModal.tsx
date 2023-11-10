@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import axios from "axios";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { tools } from "@/constants";
@@ -14,9 +15,12 @@ const ProModal = () => {
     const proModal = useProModal();
     const [loading, setLoading] = useState(false);
 
-    const handleSubscribe = () => {
+    const handleSubscribe = async () => {
         try {
             setLoading(true);
+            const response = await axios.get("/api/stripe");
+
+            window.location.href = response.data.url;
         } catch (error) {
             toast.error("Something went wrong");
         } finally {
@@ -67,7 +71,7 @@ const ProModal = () => {
                         variant="gradient"
                         className="w-full"
                     >
-                        Upgrade
+                        Upgrade Now
                         <Zap className="w-4 h-4 ml-2" />
                     </Button>
                 </DialogFooter>

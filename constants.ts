@@ -1,6 +1,6 @@
 import { Bot, Code, ImageIcon, Music, VideoIcon } from "lucide-react";
 
-export const MAX_FREE_LIMIT = 10;
+export const MAX_FREE_LIMIT = 1;
 
 export const tools = [
     {
