@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
+import { CrispProvider } from "@/providers/CrispProvider";
 import type { Metadata } from "next";
 import { ModalProvider } from "@/providers/ModalProvider";
 import NextThemeProvider from "@/providers/NextThemeProvider";
@@ -19,6 +20,7 @@ const RootLayout: React.FC<props> = ({ children }) => {
   return (
     <ClerkProvider>
       <html lang="en">
+        <CrispProvider />
         <body className="">
           <NextThemeProvider>
             <ToasterProvider />
