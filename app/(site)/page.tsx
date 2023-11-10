@@ -1,9 +1,14 @@
+import Features from "@/components/landing/Features";
+import Hero from "@/components/landing/Hero";
+import LandingPageNavbar from "@/components/navigation/LandingPageNavbar";
 
 const Home: React.FC = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hello World
-    </main>
+    <div className="h-full ">
+      <LandingPageNavbar />
+      <Hero />
+      <Features />
+    </div>
   );
 };
 

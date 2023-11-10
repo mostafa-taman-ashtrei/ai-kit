@@ -14,7 +14,7 @@ const DashboardNavbar: React.FC = async () => {
                 apiLimit={apiLimit}
                 isPro={isPro}
             />
-            <div className="flex w-full justify-end gap-4  items-center">
+            <div className="flex w-full justify-end gap-4 items-center">
                 <UserAvatar />
                 <ThemeTogglerButton />
             </div>

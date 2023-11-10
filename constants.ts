@@ -9,6 +9,7 @@ export const tools = [
         href: "/chat",
         color: "text-violet-500",
         bgColor: "bg-violet-500/10",
+        desc: "Chat with a smart AI model. The model will answer your questions, give you information and way more."
     },
     {
         label: "Music Generation",
@@ -16,6 +17,7 @@ export const tools = [
         href: "/music",
         color: "text-violet-500",
         bgColor: "bg-violet-500/10",
+        desc: "Generate creative musical pieces with any instrument you want in just a few seconds."
     },
     {
         label: "Image Generation",
@@ -23,6 +25,7 @@ export const tools = [
         href: "/image",
         color: "text-violet-500",
         bgColor: "bg-violet-500/10",
+        desc: "Want more than just images, we got you covered. With AI KIT you can generate full fledged videos."
     },
     {
         label: "Video Generation",
@@ -30,6 +33,7 @@ export const tools = [
         href: "/video",
         color: "text-violet-500",
         bgColor: "bg-violet-500/10",
+        desc: "If you want more than just images we git you covered with our video generation model you can generate full fledged videos."
     },
     {
         label: "Code Generation",
@@ -37,5 +41,6 @@ export const tools = [
         href: "/code",
         color: "text-violet-500",
         bgColor: "bg-violet-500/10",
+        desc: "Clean & efficent code is at your fingertips ... all you have to do is say the word."
     },
 ];
