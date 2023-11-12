@@ -42,8 +42,10 @@ const ProModal = () => {
                                 A.I Kit Pro
                             </Badge>
                         </div>
-                        <p className="text-slate-600">
-                            A.I Kit Pro comes with <strong><u>Unlimited Generations</u></strong> for
+                        <p className="text-slate-600 text-center text-base">
+                            With A.I Kit pro you can have <strong><u>Unlimited Generations</u></strong> for all current & future features ...
+                            all that for only <strong><u>$8/month</u></strong>
+
                         </p>
                     </DialogTitle>
                     <DialogDescription className="text-center  text-zinc-900 font-medium">
@@ -69,9 +71,9 @@ const ProModal = () => {
                         onClick={handleSubscribe}
                         size="lg"
                         variant="gradient"
-                        className="w-full"
+                        className="w-full rounded-full"
                     >
-                        Upgrade Now
+                        Upgrade Now for $8.00 / month
                         <Zap className="w-4 h-4 ml-2" />
                     </Button>
                 </DialogFooter>

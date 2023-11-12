@@ -1,56 +1,55 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-
 import GradientText from "../general/GradientText";
-import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { tools } from "@/constants";
 
 const Features: React.FC = () => {
     return (
-        <div className="px-20 pb-20 my-10">
+        <section className="dark:bg-gray-800 dark:text-gray-100 bg-gray-300">
+            <div className="container max-w-xl p-6 py-12 mx-auto  lg:px-8 lg:max-w-7xl">
+                <div>
+                    <h2 className="text-3xl font-bold tracki text-center sm:text-5xl dark:text-gray-50">
+                        <GradientText text="Features" />
+                    </h2>
 
-            <h2 id="features" className=" text-2xl font-semibold tracking-tighter text-center lg:text-7xl md:text-6xl">
-                <GradientText text="Features" />
-            </h2>
+                    <p className="max-w-3xl mx-auto mt-4 text-xl text-center dark:text-gray-400">
+                        We offer a variety of different features, all of which you can explore <strong><u>for free</u></strong>.
+                    </p>
+                </div>
 
-            <p className="mx-auto text-md text-center text-gray-500 font-normal leading-relaxed fs521 lg:w-2/3">
-                We offer a variety of different features, all of which you can explore for free. We are
-                always working on new features as of right now these features are stable and working.
-                These features include
-            </p>
+                <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
+                    <div>
+                        <div className="mt-12 space-y-12">
+                            {tools.map((tool) => <div className="flex" key={tool.label}>
+                                <div className="flex-shrink-0">
+                                    <div className={cn("flex items-center justify-center  rounded-md p-5 ", tool.bgColor)}>
+                                        <tool.icon className={cn("w-9 h-9", tool.color)} />
 
+                                    </div>
+                                </div>
+                                <div className="ml-4">
+                                    <h4 className="text-lg font-medium leadi dark:text-gray-50">{tool.label}</h4>
+                                    <p className=" dark:text-gray-400">
+                                        {tool.desc}
+                                    </p>
+                                </div>
+                            </div>
+                            )}
+                        </div>
+                    </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
-                {tools.map((item) => (
-                    <Link
-                        key={item.label}
-                        href={item.href}
-                    >
-                        <Card className="border-2 border-purple-900 hover:shadow-lg cursor-pointer hover:shadow-purple-800">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-x-2 text-purple-600">
-                                    <item.icon />
-                                    <p className="text-lg">{item.label}</p>
-                                </CardTitle>
-
-                                <CardContent className="pt-4 px-0 text-gray-700">
-                                    {item.desc}
-                                </CardContent>
-                            </CardHeader>
-                        </Card>
-                    </Link>
-                ))}
+                    <div className="mt-10 lg:mt-0">
+                        <Image
+                            src="/images/features-screenshot.jpg"
+                            width={560}
+                            height={680}
+                            alt="features screenshot"
+                            className="mx-auto rounded-lg shadow-lg dark:bg-gray-500"
+                        />
+                    </div>
+                </div>
             </div>
-        </div >
-
-
-
-
-
-
-
-
-
-
+        </section>
     );
 };
 

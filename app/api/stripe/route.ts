@@ -48,7 +48,7 @@ export const GET = async () => {
                             name: "Ai Kit Pro",
                             description: "Unlimited AI Generations"
                         },
-                        unit_amount: 2000,
+                        unit_amount: 800,
                         recurring: { interval: "month" }
                     },
                     quantity: 1,

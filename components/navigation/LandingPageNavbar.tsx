@@ -23,11 +23,28 @@ const LandingPageNavbar = () => {
             </Link>
 
             <div className="flex items-center gap-x-2">
-                <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
-                    <Button variant="secondary" className="rounded-full">
-                        Get Started
-                    </Button>
-                </Link>
+                {
+                    isSignedIn
+                        ? <Link href="/dashboard">
+                            <Button variant="secondary" className="rounded-full">
+                                Get Started
+                            </Button>
+                        </Link>
+                        : <>
+                            <Link href="/sign-up">
+                                <Button variant="secondary" className="rounded-full">
+                                    Sign Up
+                                </Button>
+                            </Link>
+
+                            <Link href="/sign-in">
+                                <Button variant="default" className="rounded-full">
+                                    Sign In
+                                </Button>
+                            </Link>
+                        </>
+                }
+
                 <ThemeTogglerButton />
             </div>
         </nav>
